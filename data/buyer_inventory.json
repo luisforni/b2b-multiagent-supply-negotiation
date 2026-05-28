@@ -1,0 +1,43 @@
+{
+  "company": "AcmeCorp Manufacturing",
+  "location": "Barcelona, Spain",
+  "last_updated": "2026-05-28",
+  "materials": [
+    {
+      "name": "hot_rolled_steel",
+      "unit": "metric_ton",
+      "current_stock": 150,
+      "minimum_stock": 200,
+      "monthly_consumption": 180,
+      "reorder_point": 250,
+      "lead_time_days": 21,
+      "quality_grade": "S355",
+      "last_purchase_price": 720.0,
+      "currency": "EUR"
+    },
+    {
+      "name": "aluminum_6061",
+      "unit": "metric_ton",
+      "current_stock": 45,
+      "minimum_stock": 50,
+      "monthly_consumption": 60,
+      "reorder_point": 80,
+      "lead_time_days": 14,
+      "quality_grade": "T6",
+      "last_purchase_price": 2850.0,
+      "currency": "EUR"
+    },
+    {
+      "name": "copper_wire",
+      "unit": "metric_ton",
+      "current_stock": 8.5,
+      "minimum_stock": 10,
+      "monthly_consumption": 15,
+      "reorder_point": 20,
+      "lead_time_days": 7,
+      "quality_grade": "ETP",
+      "last_purchase_price": 9200.0,
+      "currency": "EUR"
+    }
+  ]
+}

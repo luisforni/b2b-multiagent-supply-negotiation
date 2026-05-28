@@ -1,0 +1,18 @@
+# Core framework
+langchain>=0.3.0
+langgraph>=0.2.0
+langchain-core>=0.3.0
+pydantic>=2.0.0
+pydantic-settings>=2.5.0
+python-dotenv>=1.0.0
+
+# LLM Providers — all installed, activated via PROVIDER env var
+langchain-ollama>=0.2.0
+langchain-openai>=0.2.0
+langchain-anthropic>=0.3.0
+langchain-groq>=0.2.0
+langchain-google-genai>=2.0.0
+
+# Dev / testing
+pytest>=8.0.0
+pytest-asyncio>=0.23.0

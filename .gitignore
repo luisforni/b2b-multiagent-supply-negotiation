@@ -36,6 +36,7 @@ Temporary Items
 # Environment files
 .env
 .env.*
+!.env.example
 *.env
 .envrc
 
