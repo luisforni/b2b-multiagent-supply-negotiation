@@ -133,6 +133,8 @@ def buyer_node(state: dict) -> dict:
 
     # Counter offer
     co = data.get("counter_offer", {})
+    # Resolve unit_price once so both fields are consistent
+    unit_price = float(co.get("unit_price") or state.get("buyer_target_price") or 0)
     counter = {
         "offer_id": new_offer_id(),
         "round": round_num + 1,
@@ -140,9 +142,9 @@ def buyer_node(state: dict) -> dict:
         "material": material,
         "quantity": quantity,
         "unit": unit,
-        "unit_price": co.get("unit_price", state.get("buyer_target_price", 0)),
+        "unit_price": unit_price,
         "currency": current_offer.get("currency", "EUR"),
-        "total_price": round(co.get("unit_price", 0) * quantity, 2),
+        "total_price": round(unit_price * quantity, 2),
         "delivery_days": co.get("delivery_days", current_offer.get("delivery_days", 21)),
         "incoterm": current_offer.get("incoterm", "DAP"),
         "payment_terms": co.get("payment_terms", "NET_30"),
