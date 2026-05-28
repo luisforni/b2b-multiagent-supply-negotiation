@@ -7,6 +7,8 @@ from src.providers.llm import create_llm
 from src.tools.seller_tools import SELLER_TOOLS
 from src.utils import extract_json, new_offer_id
 
+_VALID_INCOTERMS = {"EXW", "FCA", "CPT", "CIP", "DAP", "DPU", "DDP", "FAS", "FOB", "CFR", "CIF"}
+
 _SYSTEM = """\
 You are the Sales AI Agent for {seller_company}.
 
@@ -125,7 +127,9 @@ def seller_node(state: dict) -> dict:
         "currency": "EUR",
         "total_price": round(unit_price * quantity, 2),
         "delivery_days": delivery_days,
-        "incoterm": offer_data.get("incoterm", "DAP"),
+        "incoterm": offer_data.get("incoterm", "DAP").upper()
+        if offer_data.get("incoterm", "").upper() in _VALID_INCOTERMS
+        else "DAP",
         "payment_terms": offer_data.get("payment_terms", "NET_45"),
         "quality_grade": offer_data.get("quality_grade", ""),
         "carbon_per_unit_kg": offer_data.get("carbon_per_unit_kg"),

@@ -93,6 +93,9 @@ def legal_node(state: dict) -> dict:
     valid_from = date.today().isoformat()
     valid_until = (date.today() + timedelta(days=180)).isoformat()
 
+    unit_price = current_offer.get("unit_price", 0)
+    total_price = current_offer.get("total_price") or round(unit_price * quantity, 2)
+
     contract = {
         "contract_id": contract_id(),
         "status": new_status,
@@ -105,10 +108,10 @@ def legal_node(state: dict) -> dict:
                 "quality_grade": current_offer.get("quality_grade", ""),
                 "quantity": quantity,
                 "unit": unit,
-                "unit_price": current_offer.get("unit_price", 0),
+                "unit_price": unit_price,
                 "currency": current_offer.get("currency", "EUR"),
                 "carbon_per_unit_kg": current_offer.get("carbon_per_unit_kg", 0),
-                "subtotal": current_offer.get("total_price", 0),
+                "subtotal": total_price,
             }
         ],
         "terms": {
@@ -120,7 +123,7 @@ def legal_node(state: dict) -> dict:
             "force_majeure": terms_for_review["force_majeure"],
             "applicable_tariffs": [],
         },
-        "total_value": current_offer.get("total_price", 0),
+        "total_value": total_price,
         "currency": current_offer.get("currency", "EUR"),
         "valid_from": valid_from,
         "valid_until": valid_until,

@@ -7,7 +7,10 @@ from src.orchestrator.state import NegotiationState
 
 
 def _route_after_seller(state: NegotiationState) -> str:
-    if state.get("status") == "failed":
+    status = state.get("status", "negotiating")
+    if status == "agreed":
+        return "legal"
+    if status == "failed":
         return END
     if state.get("round", 0) >= state.get("max_rounds", 10):
         return END
@@ -52,7 +55,7 @@ def build_negotiation_graph() -> "CompiledGraph":  # type: ignore[name-defined]
     g.add_conditional_edges(
         "seller",
         _route_after_seller,
-        {"buyer": "buyer", END: END},
+        {"buyer": "buyer", "legal": "legal", END: END},
     )
     g.add_conditional_edges(
         "buyer",
