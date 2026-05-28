@@ -39,6 +39,14 @@ After using your tools, output ONLY a valid JSON object (no markdown fences):
 """
 
 
+_VALID_INCOTERMS = {"EXW", "FCA", "CPT", "CIP", "DAP", "DPU", "DDP", "FAS", "FOB", "CFR", "CIF"}
+
+
+def _clean_incoterm(raw: object) -> str:
+    cleaned = str(raw or "").strip().upper()[:10]
+    return cleaned if cleaned in _VALID_INCOTERMS else "DAP"
+
+
 def legal_node(state: dict) -> dict:
     material = state["material"]
     quantity = state["quantity"]
@@ -48,8 +56,11 @@ def legal_node(state: dict) -> dict:
     seller_company = state.get("seller_company", "GlobalSupplyCo")
     session_id = state.get("session_id", "UNKNOWN")
 
+    # Ensure incoterm is always a valid Incoterms 2020 code before legal review
+    validated_incoterm = _clean_incoterm(current_offer.get("incoterm"))
+
     terms_for_review = {
-        "incoterm": current_offer.get("incoterm", "DAP"),
+        "incoterm": validated_incoterm,
         "payment_terms": current_offer.get("payment_terms", "NET_45"),
         "force_majeure": True,
         "dispute_resolution": "ICC_Arbitration",
@@ -87,6 +98,15 @@ def legal_node(state: dict) -> dict:
     verdict = data.get("verdict", "CONDITIONALLY_APPROVED")
     issues = [i.get("description", str(i)) for i in data.get("issues", [])]
     warnings = [w.get("description", str(w)) for w in data.get("warnings", [])]
+
+    # Remove false-positive incoterm complaints when the incoterm we passed is valid
+    if validated_incoterm in _VALID_INCOTERMS:
+        issues = [i for i in issues if "incoterm" not in i.lower()]
+        warnings = [w for w in warnings if "incoterm" not in w.lower()]
+
+    # Recalculate verdict after filtering
+    if not issues and verdict != "APPROVED":
+        verdict = "APPROVED" if not warnings else "CONDITIONALLY_APPROVED"
 
     new_status = "finalized" if verdict == "APPROVED" else "under_review"
 

@@ -9,6 +9,12 @@ from src.utils import extract_json, new_offer_id
 
 _VALID_INCOTERMS = {"EXW", "FCA", "CPT", "CIP", "DAP", "DPU", "DDP", "FAS", "FOB", "CFR", "CIF"}
 
+
+def _validated_incoterm(raw: object, default: str = "DAP") -> str:
+    """Normalize and validate an incoterm; fall back to default if invalid."""
+    cleaned = str(raw or "").strip().upper()[:10]
+    return cleaned if cleaned in _VALID_INCOTERMS else default
+
 _SYSTEM = """\
 You are the Sales AI Agent for {seller_company}.
 
@@ -127,9 +133,7 @@ def seller_node(state: dict) -> dict:
         "currency": "EUR",
         "total_price": round(unit_price * quantity, 2),
         "delivery_days": delivery_days,
-        "incoterm": offer_data.get("incoterm", "DAP").upper()
-        if offer_data.get("incoterm", "").upper() in _VALID_INCOTERMS
-        else "DAP",
+        "incoterm": _validated_incoterm(offer_data.get("incoterm")),
         "payment_terms": offer_data.get("payment_terms", "NET_45"),
         "quality_grade": offer_data.get("quality_grade", ""),
         "carbon_per_unit_kg": offer_data.get("carbon_per_unit_kg"),
