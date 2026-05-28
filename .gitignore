@@ -129,6 +129,9 @@ yarn-error.log*
 *.rar
 *.7z
 
+# Docker local overrides
+docker-compose.override.yml
+
 # Misc
 .DS_Store?
 .idea/**
