@@ -1,9 +1,12 @@
 services:
 
+  # ── Optional: only needed when Ollama is NOT already running on the host ──
+  # Usage: docker compose --profile with-ollama up
   ollama:
     image: ollama/ollama:latest
+    profiles: [with-ollama]
     ports:
-      - "11434:11434"
+      - "11435:11434"           # 11435 on host to avoid conflict with local Ollama
     volumes:
       - ollama_models:/root/.ollama
     healthcheck:
@@ -13,16 +16,18 @@ services:
       retries: 12
       start_period: 20s
 
+  # ── Main application ──────────────────────────────────────────────────────
   app:
     build: .
-    depends_on:
-      ollama:
-        condition: service_healthy
+    # Allows the container to reach the host's Ollama (Linux needs host-gateway)
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       PROVIDER: ollama
-      OLLAMA_BASE_URL: http://ollama:11434
+      # Default: connects to Ollama already running on the host
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
       OLLAMA_MODEL: llama3.2
-    # Optionally override with .env (e.g. to use a cloud provider instead of Ollama)
+    # Optional .env overrides (e.g. PROVIDER=openai + API keys)
     env_file:
       - path: .env
         required: false
