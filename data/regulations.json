@@ -1,0 +1,36 @@
+{
+  "incoterms_2020": ["EXW", "FCA", "CPT", "CIP", "DAP", "DPU", "DDP", "FAS", "FOB", "CFR", "CIF"],
+  "tariffs": {
+    "EU_to_EU": {
+      "hot_rolled_steel": {"rate_pct": 0.0, "note": "EU single market - no tariffs"},
+      "aluminum_6061": {"rate_pct": 0.0, "note": "EU single market - no tariffs"},
+      "copper_wire": {"rate_pct": 0.0, "note": "EU single market - no tariffs"}
+    },
+    "non_EU_to_EU": {
+      "hot_rolled_steel": {
+        "rate_pct": 0.0,
+        "safeguard_surcharge_pct": 25.0,
+        "note": "EU steel safeguard measures (Reg. 2018/1013) - quota dependent"
+      },
+      "aluminum_6061": {"rate_pct": 6.0, "note": "Standard EU MFN tariff"},
+      "copper_wire": {"rate_pct": 3.0, "note": "Standard EU MFN tariff"}
+    }
+  },
+  "carbon_limits_kg_co2_per_ton": {
+    "hot_rolled_steel": 2.5,
+    "aluminum_6061": 12.0,
+    "copper_wire": 3.5,
+    "note": "EU CBAM thresholds - Phase 1 (2026)"
+  },
+  "payment_terms": {
+    "allowed": ["NET_30", "NET_45", "NET_60", "2/10_NET_30", "LC_90", "ADVANCE_20"],
+    "max_days": 90,
+    "late_payment_directive": "EU Directive 2011/7/EU - max 60 days B2B"
+  },
+  "mandatory_contract_clauses": {
+    "force_majeure": true,
+    "dispute_resolution": ["ICC_Arbitration", "CIETAC", "Court_jurisdiction"],
+    "governing_law": "Party agreement required",
+    "quality_inspection": "SGS or Bureau Veritas recommended"
+  }
+}
