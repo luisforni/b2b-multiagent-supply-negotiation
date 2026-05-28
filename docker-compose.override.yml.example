@@ -1,0 +1,12 @@
+# GPU support for Ollama (NVIDIA)
+# Rename to docker-compose.override.yml to activate.
+# Requires: NVIDIA Container Toolkit  https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/
+services:
+  ollama:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
